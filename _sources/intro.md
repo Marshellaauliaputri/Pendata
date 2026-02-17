@@ -1,4 +1,4 @@
-# Marshella Aulia Putri 240411100202
+# 240411100202 Marshella Aulia Putri
 
 
 Selamat datang di website pembelajaran mata kuliah Penambangan Data! Web ini dirancang sebagai ruang belajar yang interaktif untuk membantu memahami materi dengan cara yang lebih mudah dan menyenangkan. Di dalamnya terdapat ringkasan konsep, contoh kasus, dan beberapa latihan.

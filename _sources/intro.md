@@ -1,9 +1,11 @@
-# 240411100202 Marshella Aulia Putri
+# Welcome to your Jupyter Book
 
+This is a small sample book to give you a feel for how book content is
+structured.
+It shows off a few of the major file types, as well as some sample content.
+It does not go in-depth into any particular topic - check out [the Jupyter Book documentation](https://jupyterbook.org) for more information.
 
-Selamat datang di website pembelajaran mata kuliah Penambangan Data! Web ini dirancang sebagai ruang belajar yang interaktif untuk membantu memahami materi dengan cara yang lebih mudah dan menyenangkan. Di dalamnya terdapat ringkasan konsep, contoh kasus, dan beberapa latihan.
-
-Materi disusun secara bertahap agar bisa belajar dari dasar hingga penerapan nyata. Harapannya, website ini dapat menjadi teman belajar yang bisa membantu lebih percaya diri dalam mengolah dan menganalisis data selama perkuliahan.
+Check out the content pages bundled with this sample book to see more.
 
 ```{tableofcontents}
 ```

@@ -1,11 +1,11 @@
-# Welcome to your Jupyter Book
+# Pengantar Mata Kuliah Penambangan Data
 
-This is a small sample book to give you a feel for how book content is
-structured.
-It shows off a few of the major file types, as well as some sample content.
-It does not go in-depth into any particular topic - check out [the Jupyter Book documentation](https://jupyterbook.org) for more information.
+Selamat datang di halaman pembelajaran **Mata Kuliah Penambangan Data (Data Mining)**. Halaman ini dibuat sebagai media untuk menyajikan materi, proses, serta hasil pembelajaran yang berkaitan dengan teknik pengolahan dan analisis data. Dalam mata kuliah ini, dipelajari bagaimana data yang besar dapat diolah menjadi informasi yang bermanfaat melalui berbagai metode seperti *preprocessing*, *klasifikasi*, *clustering*, dan *evaluasi model*.
 
-Check out the content pages bundled with this sample book to see more.
+Website ini bertujuan untuk membantu memahami konsep dasar hingga penerapan penambangan data secara lebih terstruktur dan mudah diakses. Setiap bagian disusun agar pengguna dapat mengikuti alur pembelajaran dengan jelas, mulai dari input data hingga interpretasi hasil.
 
-```{tableofcontents}
-```
+---
+
+### Disusun oleh
+**Marshella Aulia Putri**  
+**NIM: 240411100202**

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Preparation &#8212; Penambangan Data</title>
+    <title>Deployment &#8212; Penambangan Data</title>
   
   
   
@@ -60,11 +60,9 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'DP';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'deploy';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Modeling" href="modeling.html" />
-    <link rel="prev" title="Data Understanding" href="DU.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -115,6 +113,8 @@
     <div class="bd-container__inner bd-page-width">
       
       
+      
+        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -168,11 +168,11 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="konsepdasar.html">Konsep Dasar Data Mining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="BU.html">Business Understanding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DU.html">Data Understanding</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DP.html">Data Preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modeling.html">Modeling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="UTS_PENDATA.html">Analisa Data Kesuburan Tanah</a></li>
 <li class="toctree-l1"><a class="reference internal" href="NB_Pendata.html">Implementasi Naive Bayes (GaussianNB) dengan Python &amp; KNIME</a></li>
@@ -252,7 +252,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDP.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fdeploy.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -282,7 +282,7 @@
       
       
       
-      <li><a href="_sources/DP.ipynb" target="_blank"
+      <li><a href="_sources/deploy.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -356,7 +356,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Data Preparation</h1>
+    <h1>Deployment</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,20 +370,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="data-preparation">
-<h1>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading">#</a></h1>
-<p>Tahap persiapan data merupakan fondasi penting dalam proses pengolahan data dan pembangunan model. Pada tahap ini, data yang telah dikumpulkan dari berbagai sumber akan diperiksa dan diproses agar siap digunakan dalam pemodelan. Kegiatan utama meliputi:</p>
-<ol class="arabic simple">
-<li><p><strong>Pemilihan Data yang Relevan</strong><br />
-Memastikan hanya data yang memiliki nilai informasi dan relevansi terhadap tujuan analisis yang dipilih. Hal ini membantu mengurangi kebisingan (noise) dan meningkatkan kualitas model.</p></li>
-<li><p><strong>Pembersihan Data</strong><br />
-Mengatasi masalah seperti data yang hilang (missing values), data duplikat, atau data yang tidak konsisten. Pembersihan data ini penting agar model tidak terpengaruh oleh informasi yang salah atau tidak lengkap.</p></li>
-<li><p><strong>Transformasi Data</strong><br />
-Melakukan normalisasi, standarisasi, encoding kategori, atau transformasi lainnya agar data sesuai dengan format yang dibutuhkan oleh algoritma. Misalnya, mengubah data teks menjadi vektor numerik untuk pemodelan machine learning.</p></li>
-<li><p><strong>Pengaturan Format dan Struktur</strong><br />
-Menyesuaikan struktur data seperti kolom, tipe data, dan format tanggal agar seragam dan dapat diproses dengan lancar oleh perangkat lunak analisis atau algoritma.</p></li>
-</ol>
-<p>Tahap ini memastikan data yang digunakan berkualitas tinggi, sehingga model yang dibangun nantinya lebih akurat dan dapat diandalkan.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="deployment">
+<h1>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h1>
+<p>Tahap deployment adalah proses implementasi model ke dalam lingkungan nyata agar dapat digunakan secara langsung untuk mendukung pengambilan keputusan atau operasional sehari-hari. Setelah model dibangun dan dievaluasi, tahap ini memastikan bahwa model dapat bekerja dengan data yang masuk secara real-time maupun batch. Model diintegrasikan ke dalam sistem organisasi, seperti aplikasi web, aplikasi mobile, atau sistem backend, sehingga pengguna dapat memanfaatkan hasil prediksi dan rekomendasi dengan mudah. Pemantauan dilakukan secara berkala untuk memastikan model tetap akurat dan relevan seiring perubahan pola data atau kondisi bisnis. Selain itu, evaluasi rutin juga dilakukan untuk mengidentifikasi potensi kesalahan atau penurunan performa, sehingga model dapat diperbarui, disesuaikan, atau dilatih ulang bila diperlukan. Dengan penerapan yang tepat, model tidak hanya menjadi prototipe, tetapi menjadi alat yang efektif dan berdampak nyata dalam mendukung keputusan organisasi.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -416,24 +405,6 @@ Menyesuaikan struktur data seperti kolom, tipe data, dan format tanggal agar ser
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="DU.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Data Understanding</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="modeling.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Modeling</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

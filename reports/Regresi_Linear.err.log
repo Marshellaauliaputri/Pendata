@@ -19,30 +19,31 @@ Traceback (most recent call last):
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
 import numpy as np
-from sklearn.linear_model import LinearRegression
 
-# Data dari grafik
-X = np.array([[2], [3], [3], [3], [4], [4], [5]])
-Y = np.array([2, 5, 4, 3, 3, 5, 6])
+# Data
+x = np.array([2, 3, 3, 3, 4, 4, 5])
+y = np.array([2, 5, 4, 3, 3, 5, 6])
 
-# Membuat model regresi linier
-model = LinearRegression()
+# Membuat matriks X dengan kolom pertama berisi 1 untuk intercept
+X = np.column_stack((np.ones(len(x)), x))
 
-# Melatih model
-model.fit(X, Y)
+# Mengubah y menjadi vektor kolom
+Y = y.reshape(-1, 1)
 
-# Mengambil nilai intercept dan koefisien
-intercept = model.intercept_
-slope = model.coef_[0]
+# Menghitung beta menggunakan rumus normal equation
+beta = np.linalg.inv(X.T @ X) @ X.T @ Y
 
-print("Intercept / b0 =", intercept)
-print("Koefisien / b1 =", slope)
+print("Matriks X:")
+print(X)
 
-# Persamaan regresi
-print(f"Persamaan regresi: y = {intercept:.2f} + {slope:.2f}x")
+print("\nVektor Y:")
+print(Y)
 
+print("\nHasil beta:")
+print(beta)
 
-
+print("\nIntercept / b0 =", beta[0][0])
+print("Koefisien / b1 =", beta[1][0])
 ------------------
 
 
@@ -50,8 +51,8 @@ print(f"Persamaan regresi: y = {intercept:.2f} + {slope:.2f}x")
 [31mModuleNotFoundError[39m                       Traceback (most recent call last)
 [36mCell[39m[36m [39m[32mIn[1][39m[32m, line 1[39m
 [32m----> [39m[32m1[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mnumpy[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mnp[39;00m
-[32m      2[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01msklearn[39;00m[34;01m.[39;00m[34;01mlinear_model[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m LinearRegression
-[32m      4[39m [38;5;66;03m# Data dari grafik[39;00m
+[32m      3[39m [38;5;66;03m# Data[39;00m
+[32m      4[39m x = np.array([[32m2[39m, [32m3[39m, [32m3[39m, [32m3[39m, [32m4[39m, [32m4[39m, [32m5[39m])
 
 [31mModuleNotFoundError[39m: No module named 'numpy'
 

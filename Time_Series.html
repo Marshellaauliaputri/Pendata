@@ -1,0 +1,1416 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Forecasting dengan Explainability di SKForecast &#8212; Penambangan Data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Time_Series';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Peramalan Kadar NO₂ di Daerah Sumenep Madura" href="NO2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.jpeg" class="logo__image only-light" alt="Penambangan Data - Home"/>
+    <img src="_static/logo.jpeg" class="logo__image only-dark pst-js-only" alt="Penambangan Data - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Pengantar Mata Kuliah Penambangan Data
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="konsepdasar.html">Konsep Dasar Data Mining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BU.html">Business Understanding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DU.html">Data Understanding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DP.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WKNN.html">Weighted K-Nearest Neighbor (WKNN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UTS_PENDATA.html">Analisa Data Kesuburan Tanah</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NB_Pendata.html">Implementasi Naive Bayes (GaussianNB) dengan Python &amp; KNIME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tree.html">Decision Tree Classifier di KNIME</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Random_Forest.html">Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Regresi_Linear.html">Analisis Data Menggunakan Regresi Linier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NO2.html">Peramalan Kadar NO₂ di Daerah Sumenep Madura</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Forecasting dengan Explainability di SKForecast</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FTime_Series.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Time_Series.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Forecasting dengan Explainability di SKForecast</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-prediksi">1. Analisis Prediksi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bentuk-data-training">2. Bentuk Data Training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-lag">3. Apa Itu Lag?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-definisi-sederhana">a. Definisi Sederhana</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-analogi-mudah">b. Analogi Mudah</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-ilustrasi-visual">c. Ilustrasi Visual</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proses-analisis-yang-dilakukan">4. Proses Analisis yang Dilakukan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-alur-keseluruhan">a. Alur Keseluruhan</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-rumus-matematis-forecasting-autoregressive">b. Rumus Matematis Forecasting (Autoregressive)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-forecasting-time-series-dengan-skforecast">Implementasi Forecasting Time Series dengan SKForecast</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-persiapan-library">Step 1 — Persiapan Library</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-import-library">Step 2 — Import Library</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-load-dan-eksplorasi-data">Step 3 — Load dan Eksplorasi Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-memahami-konsep-lag">Step 4 — Memahami Konsep Lag</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-membuat-dan-melatih-model">Step 5 — Membuat dan Melatih Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-explainability">Step 6 — Explainability</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="forecasting-dengan-explainability-di-skforecast">
+<h1>Forecasting dengan Explainability di SKForecast<a class="headerlink" href="#forecasting-dengan-explainability-di-skforecast" title="Link to this heading">#</a></h1>
+<section id="analisis-prediksi">
+<h2>1. Analisis Prediksi<a class="headerlink" href="#analisis-prediksi" title="Link to this heading">#</a></h2>
+<p>Refrensi: <a class="reference external" href="https://skforecast.org/0.15.1/user_guides/explainability.html">https://skforecast.org/0.15.1/user_guides/explainability.html</a></p>
+<p>Prediksi ini fokus pada peramalan deret waktu (time series forecasting). Model mempelajari nilai-nilai masa lalu untuk memperkirakan nilai di masa depan.</p>
+<p>Contoh aplikasi nyata:</p>
+<p>Prediksi penjualan harian/bulanan
+Prediksi harga saham
+Prediksi permintaan barang
+Prediksi trafik website</p>
+<p>Tujuannya:</p>
+<p>Menghasilkan prediksi yang akurat.
+Mengetahui kontribusi tiap input (lag) terhadap hasil prediksi (explainability).</p>
+</section>
+<section id="bentuk-data-training">
+<h2>2. Bentuk Data Training<a class="headerlink" href="#bentuk-data-training" title="Link to this heading">#</a></h2>
+<p>Data time series biasanya memiliki dua komponen:</p>
+<ul class="simple">
+<li><p>Index waktu (datetime)</p></li>
+<li><p>Target variable (nilai yang diprediksi)</p></li>
+</ul>
+<p>Contoh dataset awal:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ds (tanggal)</p></th>
+<th class="head"><p>y (nilai)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2022-01-01</p></td>
+<td><p>120</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-01-02</p></td>
+<td><p>130</p></td>
+</tr>
+<tr class="row-even"><td><p>2022-01-03</p></td>
+<td><p>128</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Setelah dibuat lag (feature input):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>y_lag_1</p></th>
+<th class="head"><p>y_lag_2</p></th>
+<th class="head"><p>y_lag_3</p></th>
+<th class="head"><p>y</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>128</p></td>
+<td><p>130</p></td>
+<td><p>120</p></td>
+<td><p>132</p></td>
+</tr>
+<tr class="row-odd"><td><p>130</p></td>
+<td><p>128</p></td>
+<td><p>120</p></td>
+<td><p>135</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Input (X) → y_lag_1, y_lag_2, dst</p></li>
+<li><p>Output (y) → target deret waktu</p></li>
+</ul>
+</section>
+<section id="apa-itu-lag">
+<h2>3. Apa Itu Lag?<a class="headerlink" href="#apa-itu-lag" title="Link to this heading">#</a></h2>
+<section id="a-definisi-sederhana">
+<h3>a. Definisi Sederhana<a class="headerlink" href="#a-definisi-sederhana" title="Link to this heading">#</a></h3>
+<p>Lag adalah nilai masa lalu yang digunakan sebagai <em>feature</em> untuk memprediksi nilai di masa depan dalam deret waktu (time series).<br />
+Dengan kata lain, lag adalah “nilai sebelumnya” yang membantu model memahami pola temporal.</p>
+</section>
+<section id="b-analogi-mudah">
+<h3>b. Analogi Mudah<a class="headerlink" href="#b-analogi-mudah" title="Link to this heading">#</a></h3>
+<p>Bayangkan kamu ingin menebak cuaca besok.</p>
+<ul class="simple">
+<li><p>Cuaca hari ini dan beberapa hari sebelumnya adalah informasi penting.</p></li>
+<li><p>Data ini mirip dengan lag dalam forecasting, karena nilai masa lalu membantu prediksi masa depan.</p></li>
+</ul>
+</section>
+<section id="c-ilustrasi-visual">
+<h3>c. Ilustrasi Visual<a class="headerlink" href="#c-ilustrasi-visual" title="Link to this heading">#</a></h3>
+<p>Misal kita punya penjualan selama 5 hari:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Hari</p></th>
+<th class="head"><p>Penjualan</p></th>
+<th class="head"><p>Lag 1</p></th>
+<th class="head"><p>Lag 2</p></th>
+<th class="head"><p>Lag 3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>120</p></td>
+<td><p>-</p></td>
+<td><p>-</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>130</p></td>
+<td><p>120</p></td>
+<td><p>-</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>128</p></td>
+<td><p>130</p></td>
+<td><p>120</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>132</p></td>
+<td><p>128</p></td>
+<td><p>130</p></td>
+<td><p>120</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>135</p></td>
+<td><p>132</p></td>
+<td><p>128</p></td>
+<td><p>130</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Kolom Lag 1 = nilai sehari sebelumnya</p></li>
+<li><p>Kolom Lag 2 = nilai dua hari sebelumnya</p></li>
+<li><p>Kolom Lag 3 = nilai tiga hari sebelumnya</p></li>
+</ul>
+<p>Catatan: Semakin banyak lag yang digunakan, model dapat menangkap pola jangka pendek dan jangka panjang, tapi terlalu banyak lag juga bisa menyebabkan overfitting.</p>
+</section>
+</section>
+<section id="proses-analisis-yang-dilakukan">
+<h2>4. Proses Analisis yang Dilakukan<a class="headerlink" href="#proses-analisis-yang-dilakukan" title="Link to this heading">#</a></h2>
+<p>Proses analisis forecasting dengan SKForecast melibatkan beberapa tahap, dari persiapan data hingga interpretasi hasil prediksi.</p>
+<section id="a-alur-keseluruhan">
+<h3>a. Alur Keseluruhan<a class="headerlink" href="#a-alur-keseluruhan" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Load Data</p>
+<ul class="simple">
+<li><p>Dataset berupa deret waktu, misal <code class="docutils literal notranslate"><span class="pre">vic_electricity</span></code>.</p></li>
+<li><p>Pastikan kolom tanggal (<code class="docutils literal notranslate"><span class="pre">ds</span></code>) sebagai index waktu, dan kolom target (<code class="docutils literal notranslate"><span class="pre">y</span></code>) bersih dari missing value.</p></li>
+</ul>
+</li>
+<li><p>Transformasi Lag</p>
+<ul class="simple">
+<li><p>Nilai historis diubah menjadi <em>feature lag</em> (misal <code class="docutils literal notranslate"><span class="pre">lag_1</span></code> sampai <code class="docutils literal notranslate"><span class="pre">lag_24</span></code>).</p></li>
+<li><p>Tujuan: memberi konteks temporal pada model agar pola masa lalu membantu prediksi masa depan.</p></li>
+</ul>
+</li>
+<li><p>Training Model</p>
+<ul class="simple">
+<li><p>Gunakan <code class="docutils literal notranslate"><span class="pre">ForecasterRecursive</span></code> dengan <code class="docutils literal notranslate"><span class="pre">LGBMRegressor</span></code> untuk mempelajari hubungan antara lag dan target.</p></li>
+<li><p>Model belajar dari data historis untuk memprediksi langkah selanjutnya secara berulang (<em>recursive forecasting</em>).</p></li>
+</ul>
+</li>
+<li><p>Prediksi dan Evaluasi</p>
+<ul class="simple">
+<li><p>Prediksi dilakukan untuk beberapa periode ke depan (<code class="docutils literal notranslate"><span class="pre">steps</span></code>).</p></li>
+<li><p>Evaluasi menggunakan backtesting, dengan metrik error seperti MAE, MAPE, atau RMSE.</p></li>
+<li><p>Memastikan model tidak overfit dan prediksi realistis.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="b-rumus-matematis-forecasting-autoregressive">
+<h3>b. Rumus Matematis Forecasting (Autoregressive)<a class="headerlink" href="#b-rumus-matematis-forecasting-autoregressive" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\hat{y}_t = \beta_1 y_{t-1} + \beta_2 y_{t-2} + \dots + \beta_p y_{t-p}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\((\hat{y}_t\)</span>) → prediksi pada waktu t</p></li>
+<li><p><span class="math notranslate nohighlight">\((y_{t-1}, y_{t-2}, \)</span>dots<span class="math notranslate nohighlight">\()\)</span> → nilai lag</p></li>
+<li><p><span class="math notranslate nohighlight">\((\beta_1, \beta_2, \)</span>dots<span class="math notranslate nohighlight">\()\)</span> → bobot yang dipelajari model</p></li>
+</ul>
+</section>
+</section>
+<section id="implementasi-forecasting-time-series-dengan-skforecast">
+<h2>Implementasi Forecasting Time Series dengan SKForecast<a class="headerlink" href="#implementasi-forecasting-time-series-dengan-skforecast" title="Link to this heading">#</a></h2>
+<section id="step-1-persiapan-library">
+<h3>Step 1 — Persiapan Library<a class="headerlink" href="#step-1-persiapan-library" title="Link to this heading">#</a></h3>
+<p>Sebelum memulai analisis forecasting, kita perlu memastikan semua library yang diperlukan sudah tersedia.<br />
+Langkah ini hanya dijalankan sekali saja di Google Colab atau Jupyter Notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>scikit-learn<span class="w"> </span>skforecast<span class="w"> </span>lightgbm<span class="w"> </span>pandas<span class="w"> </span>matplotlib<span class="w"> </span>--quiet
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pip in /usr/local/python/3.12.1/lib/python3.12/site-packages (26.0.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting pip
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Downloading pip-26.1.2-py3-none-any.whl.metadata (4.6 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading pip-26.1.2-py3-none-any.whl (1.8 MB)
+?25l   <span class=" -Color -Color-C237">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Green">0.0/1.8 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   <span class=" -Color -Color-Red">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Green">1.8/1.8 MB</span> <span class=" -Color -Color-Red">20.2 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+?25h
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 26.0.1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Uninstalling pip-26.0.1:
+      Successfully uninstalled pip-26.0.1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Successfully installed pip-26.1.2
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>^C
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-2-import-library">
+<h3>Step 2 — Import Library<a class="headerlink" href="#step-2-import-library" title="Link to this heading">#</a></h3>
+<p>Setelah library berhasil diinstal, langkah berikutnya adalah mengimpor semua library dan modul yang akan digunakan untuk analisis dan visualisasi data time series.<br />
+Kami membuat versi ini sedikit berbeda agar lebih mudah dipahami.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mengabaikan peringatan agar tampilan lebih bersih</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="c1"># Library utama untuk manipulasi data dan komputasi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Library untuk visualisasi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># Library untuk explainability</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span><span class="p">,</span> <span class="n">PartialDependenceDisplay</span>
+
+<span class="c1"># Library untuk model forecasting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lightgbm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LGBMRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skforecast.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skforecast.recursive</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForecasterRecursive</span>
+
+<span class="c1"># Pengaturan tampilan grafik</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.spines.top&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.spines.right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Semua library berhasil di-import dan siap digunakan!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ Semua library berhasil di-import dan siap digunakan!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-3-load-dan-eksplorasi-data">
+<h3>Step 3 — Load dan Eksplorasi Data<a class="headerlink" href="#step-3-load-dan-eksplorasi-data" title="Link to this heading">#</a></h3>
+<p>Pada langkah ini kita memuat dataset dan melakukan eksplorasi awal untuk memahami pola data.</p>
+<p>a. Load Dataset</p>
+<ul class="simple">
+<li><p>Dataset yang digunakan: <code class="docutils literal notranslate"><span class="pre">vic_electricity</span></code></p></li>
+<li><p>Sumber: Konsumsi listrik per 30 menit di Victoria, Australia</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Memuat dataset vic_electricity</span>
+<span class="n">data_raw</span> <span class="o">=</span> <span class="n">fetch_dataset</span><span class="p">(</span><span class="s1">&#39;vic_electricity&#39;</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📄 Bentuk dataset awal: </span><span class="si">{</span><span class="n">data_raw</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_raw</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>vic_electricity
+---------------
+Half-hourly electricity demand for Victoria, Australia
+O&#39;Hara-Wild M, Hyndman R, Wang E, Godahewa R (2022).tsibbledata: Diverse
+Datasets for &#39;tsibble&#39;. https://tsibbledata.tidyverts.org/,
+https://github.com/tidyverts/tsibbledata/.
+https://tsibbledata.tidyverts.org/reference/vic_elec.html
+Shape of the dataset: (52608, 5)
+📄 Bentuk dataset awal: (52608, 5)
+                   Time       Demand  Temperature        Date  Holiday
+0  2011-12-31T13:00:00Z  4382.825174        21.40  2012-01-01     True
+1  2011-12-31T13:30:00Z  4263.365526        21.05  2012-01-01     True
+2  2011-12-31T14:00:00Z  4048.966046        20.70  2012-01-01     True
+3  2011-12-31T14:30:00Z  3877.563330        20.55  2012-01-01     True
+4  2011-12-31T15:00:00Z  4036.229746        20.40  2012-01-01     True
+</pre></div>
+</div>
+</div>
+</div>
+<p>Penjelasan:</p>
+<ul class="simple">
+<li><p>data_raw berisi semua kolom asli, termasuk waktu dan demand listrik.</p></li>
+<li><p>Memeriksa bentuk dan beberapa baris pertama penting untuk memahami struktur data.</p></li>
+</ul>
+<p>b. Preprocessing Data</p>
+<p>Menyiapkan kolom target dan index waktu.
+Pastikan frekuensi data sesuai (30 menit) dan hanya ambil kolom target (Demand).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Salin data asli</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data_raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Konversi kolom waktu menjadi datetime</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">])</span>
+
+<span class="c1"># Set index waktu</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+
+<span class="c1"># Pastikan frekuensi data 30 menit</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;30min&#39;</span><span class="p">)</span>
+
+<span class="c1"># Ambil kolom target saja</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Demand&#39;</span><span class="p">]</span>
+
+<span class="c1"># Tampilkan ringkasan</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Data siap!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jumlah data : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> baris&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Periode     : </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Demand min  : </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MWh&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Demand max  : </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MWh&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Demand rata : </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MWh&quot;</span><span class="p">)</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Data siap!
+Jumlah data : 52,608 baris
+Periode     : 2011-12-31 13:00:00+00:00 → 2014-12-31 12:30:00+00:00
+Demand min  : 2857.9 MWh
+Demand max  : 9345.0 MWh
+Demand rata : 4665.4 MWh
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Demand</th>
+    </tr>
+    <tr>
+      <th>Time</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2011-12-31 13:00:00+00:00</th>
+      <td>4382.825174</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 13:30:00+00:00</th>
+      <td>4263.365526</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 14:00:00+00:00</th>
+      <td>4048.966046</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 14:30:00+00:00</th>
+      <td>3877.563330</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 15:00:00+00:00</th>
+      <td>4036.229746</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 15:30:00+00:00</th>
+      <td>3865.597244</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 16:00:00+00:00</th>
+      <td>3694.097664</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 16:30:00+00:00</th>
+      <td>3561.623686</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 17:00:00+00:00</th>
+      <td>3433.035352</td>
+    </tr>
+    <tr>
+      <th>2011-12-31 17:30:00+00:00</th>
+      <td>3359.468000</td>
+    </tr>
+  </tbody>
+</table>
+</div><br><label><b>dtype:</b> float64</label></div></div>
+</div>
+<p>c. Visualisasi Data
+Lihat pola data keseluruhan dan beberapa periode awal untuk memahami fluktuasi harian.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi data</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+
+<span class="c1"># Plot keseluruhan</span>
+<span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;steelblue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Konsumsi Listrik — Keseluruhan Data&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Demand (MWh)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot detail 2 minggu pertama</span>
+<span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">24</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Konsumsi Listrik — 2 Minggu Pertama&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Demand (MWh)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Waktu&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Perhatikan pola naik-turun harian — ini yang akan ditangkap oleh lag!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/88d4ef4a70c75d1e02fe869edcda4dfff3652a01f94513a264eadb2d480a4bf4.png" src="_images/88d4ef4a70c75d1e02fe869edcda4dfff3652a01f94513a264eadb2d480a4bf4.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>💡 Perhatikan pola naik-turun harian — ini yang akan ditangkap oleh lag!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-4-memahami-konsep-lag">
+<h3>Step 4 — Memahami Konsep Lag<a class="headerlink" href="#step-4-memahami-konsep-lag" title="Link to this heading">#</a></h3>
+<p>a. Membuat Fitur Lag
+Lag adalah nilai masa lalu yang digunakan sebagai input model agar dapat menangkap pola temporal.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tentukan jumlah lag</span>
+<span class="n">n_lags</span> <span class="o">=</span> <span class="mi">24</span>  <span class="c1"># misal 24 langkah (12 jam jika data tiap 30 menit)</span>
+
+<span class="c1"># Buat fitur lag secara otomatis</span>
+<span class="n">data_lag</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_lags</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">data_lag</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Demand_lag_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_lag</span><span class="p">[</span><span class="s1">&#39;Demand&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># Buang baris dengan nilai NA hasil lag</span>
+<span class="n">data_lag</span> <span class="o">=</span> <span class="n">data_lag</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Fitur lag berhasil dibuat: </span><span class="si">{</span><span class="n">data_lag</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2"> lag&quot;</span><span class="p">)</span>
+<span class="n">data_lag</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ Fitur lag berhasil dibuat: 24 lag
+</pre></div>
+</div>
+<div class="output text_html">
+  <div id="df-358a83f6-c064-4762-823f-fd0970857509" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Demand</th>
+      <th>Demand_lag_1</th>
+      <th>Demand_lag_2</th>
+      <th>Demand_lag_3</th>
+      <th>Demand_lag_4</th>
+      <th>Demand_lag_5</th>
+      <th>Demand_lag_6</th>
+      <th>Demand_lag_7</th>
+      <th>Demand_lag_8</th>
+      <th>Demand_lag_9</th>
+      <th>...</th>
+      <th>Demand_lag_15</th>
+      <th>Demand_lag_16</th>
+      <th>Demand_lag_17</th>
+      <th>Demand_lag_18</th>
+      <th>Demand_lag_19</th>
+      <th>Demand_lag_20</th>
+      <th>Demand_lag_21</th>
+      <th>Demand_lag_22</th>
+      <th>Demand_lag_23</th>
+      <th>Demand_lag_24</th>
+    </tr>
+    <tr>
+      <th>Time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2012-01-01 01:00:00+00:00</th>
+      <td>4938.795740</td>
+      <td>4772.133542</td>
+      <td>4599.507418</td>
+      <td>4413.074788</td>
+      <td>4245.024938</td>
+      <td>4092.566212</td>
+      <td>3909.300738</td>
+      <td>3719.985142</td>
+      <td>3580.091164</td>
+      <td>3494.418154</td>
+      <td>...</td>
+      <td>3359.468000</td>
+      <td>3433.035352</td>
+      <td>3561.623686</td>
+      <td>3694.097664</td>
+      <td>3865.597244</td>
+      <td>4036.229746</td>
+      <td>3877.563330</td>
+      <td>4048.966046</td>
+      <td>4263.365526</td>
+      <td>4382.825174</td>
+    </tr>
+    <tr>
+      <th>2012-01-01 01:30:00+00:00</th>
+      <td>5080.138254</td>
+      <td>4938.795740</td>
+      <td>4772.133542</td>
+      <td>4599.507418</td>
+      <td>4413.074788</td>
+      <td>4245.024938</td>
+      <td>4092.566212</td>
+      <td>3909.300738</td>
+      <td>3719.985142</td>
+      <td>3580.091164</td>
+      <td>...</td>
+      <td>3331.343274</td>
+      <td>3359.468000</td>
+      <td>3433.035352</td>
+      <td>3561.623686</td>
+      <td>3694.097664</td>
+      <td>3865.597244</td>
+      <td>4036.229746</td>
+      <td>3877.563330</td>
+      <td>4048.966046</td>
+      <td>4263.365526</td>
+    </tr>
+    <tr>
+      <th>2012-01-01 02:00:00+00:00</th>
+      <td>5211.915476</td>
+      <td>5080.138254</td>
+      <td>4938.795740</td>
+      <td>4772.133542</td>
+      <td>4599.507418</td>
+      <td>4413.074788</td>
+      <td>4245.024938</td>
+      <td>4092.566212</td>
+      <td>3909.300738</td>
+      <td>3719.985142</td>
+      <td>...</td>
+      <td>3304.641186</td>
+      <td>3331.343274</td>
+      <td>3359.468000</td>
+      <td>3433.035352</td>
+      <td>3561.623686</td>
+      <td>3694.097664</td>
+      <td>3865.597244</td>
+      <td>4036.229746</td>
+      <td>3877.563330</td>
+      <td>4048.966046</td>
+    </tr>
+    <tr>
+      <th>2012-01-01 02:30:00+00:00</th>
+      <td>5328.317180</td>
+      <td>5211.915476</td>
+      <td>5080.138254</td>
+      <td>4938.795740</td>
+      <td>4772.133542</td>
+      <td>4599.507418</td>
+      <td>4413.074788</td>
+      <td>4245.024938</td>
+      <td>4092.566212</td>
+      <td>3909.300738</td>
+      <td>...</td>
+      <td>3272.106404</td>
+      <td>3304.641186</td>
+      <td>3331.343274</td>
+      <td>3359.468000</td>
+      <td>3433.035352</td>
+      <td>3561.623686</td>
+      <td>3694.097664</td>
+      <td>3865.597244</td>
+      <td>4036.229746</td>
+      <td>3877.563330</td>
+    </tr>
+    <tr>
+      <th>2012-01-01 03:00:00+00:00</th>
+      <td>5436.420076</td>
+      <td>5328.317180</td>
+      <td>5211.915476</td>
+      <td>5080.138254</td>
+      <td>4938.795740</td>
+      <td>4772.133542</td>
+      <td>4599.507418</td>
+      <td>4413.074788</td>
+      <td>4245.024938</td>
+      <td>4092.566212</td>
+      <td>...</td>
+      <td>3275.998060</td>
+      <td>3272.106404</td>
+      <td>3304.641186</td>
+      <td>3331.343274</td>
+      <td>3359.468000</td>
+      <td>3433.035352</td>
+      <td>3561.623686</td>
+      <td>3694.097664</td>
+      <td>3865.597244</td>
+      <td>4036.229746</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 25 columns</p>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-358a83f6-c064-4762-823f-fd0970857509')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-358a83f6-c064-4762-823f-fd0970857509 button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-358a83f6-c064-4762-823f-fd0970857509');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+    </div>
+  </div>
+</div></div>
+</div>
+</section>
+<section id="step-5-membuat-dan-melatih-model">
+<h3>Step 5 — Membuat dan Melatih Model<a class="headerlink" href="#step-5-membuat-dan-melatih-model" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skforecast.recursive</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForecasterRecursive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lightgbm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LGBMRegressor</span>
+
+<span class="c1"># Buat forecaster dengan LGBMRegressor</span>
+<span class="n">forecaster</span> <span class="o">=</span> <span class="n">ForecasterRecursive</span><span class="p">(</span>
+    <span class="n">regressor</span><span class="o">=</span><span class="n">LGBMRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+    <span class="n">lags</span><span class="o">=</span><span class="n">n_lags</span>
+<span class="p">)</span>
+
+<span class="c1"># Fit model menggunakan target</span>
+<span class="n">forecaster</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">data_lag</span><span class="p">[</span><span class="s1">&#39;Demand&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Model berhasil dilatih!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.009247 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 6120
+[LightGBM] [Info] Number of data points in the train set: 52560, number of used features: 24
+[LightGBM] [Info] Start training from score 4665.461419
+✅ Model berhasil dilatih!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-6-explainability">
+<h3>Step 6 — Explainability<a class="headerlink" href="#step-6-explainability" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Ambil fitur lag</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">data_lag</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Demand&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span>
+
+<span class="c1"># Ambil importance dari LGBM</span>
+<span class="n">importance</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">regressor</span><span class="o">.</span><span class="n">feature_importances_</span>
+
+<span class="c1"># Buat DataFrame untuk ranking</span>
+<span class="n">importance_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Feature&#39;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span>
+    <span class="s1">&#39;Importance&#39;</span><span class="p">:</span> <span class="n">importance</span>
+<span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Importance&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Tampilkan tabel</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">importance_df</span><span class="p">)</span>
+
+<span class="c1"># Plot feature importance</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">importance_df</span><span class="p">[</span><span class="s1">&#39;Feature&#39;</span><span class="p">],</span> <span class="n">importance_df</span><span class="p">[</span><span class="s1">&#39;Importance&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Feature Importance dari LGBMRegressor&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Importance&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          Feature  Importance
+0    Demand_lag_1         700
+1    Demand_lag_2         313
+2    Demand_lag_3         209
+3    Demand_lag_4         197
+4    Demand_lag_5         159
+23  Demand_lag_24         123
+16  Demand_lag_17         117
+14  Demand_lag_15         111
+6    Demand_lag_7          97
+12  Demand_lag_13          96
+7    Demand_lag_8          88
+22  Demand_lag_23          80
+8    Demand_lag_9          77
+9   Demand_lag_10          75
+15  Demand_lag_16          74
+5    Demand_lag_6          67
+21  Demand_lag_22          65
+20  Demand_lag_21          62
+18  Demand_lag_19          57
+13  Demand_lag_14          54
+17  Demand_lag_18          50
+10  Demand_lag_11          47
+11  Demand_lag_12          44
+19  Demand_lag_20          38
+</pre></div>
+</div>
+<img alt="_images/a2719fadd1097261615355840b4c10e18d60b02086fb07ea241ba41df58c08a1.png" src="_images/a2719fadd1097261615355840b4c10e18d60b02086fb07ea241ba41df58c08a1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="kesimpulan">
+<h2>Kesimpulan<a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h2>
+<p>Model forecasting dibangun menggunakan LightGBM dan Skforecast dengan memanfaatkan lag 1 sampai lag 7 serta Temperature sebagai variabel eksternal. Setelah model dilatih, dilakukan analisis explainability menggunakan Feature Importance dan SHAP untuk mengetahui fitur yang paling berpengaruh terhadap hasil prediksi. Hasil analisis menunjukkan bahwa nilai demand pada beberapa hari sebelumnya dan suhu merupakan faktor utama yang memengaruhi prediksi kebutuhan listrik.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="NO2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Peramalan Kadar NO₂ di Daerah Sumenep Madura</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-prediksi">1. Analisis Prediksi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bentuk-data-training">2. Bentuk Data Training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-lag">3. Apa Itu Lag?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-definisi-sederhana">a. Definisi Sederhana</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-analogi-mudah">b. Analogi Mudah</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-ilustrasi-visual">c. Ilustrasi Visual</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proses-analisis-yang-dilakukan">4. Proses Analisis yang Dilakukan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-alur-keseluruhan">a. Alur Keseluruhan</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-rumus-matematis-forecasting-autoregressive">b. Rumus Matematis Forecasting (Autoregressive)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-forecasting-time-series-dengan-skforecast">Implementasi Forecasting Time Series dengan SKForecast</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-persiapan-library">Step 1 — Persiapan Library</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-import-library">Step 2 — Import Library</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-load-dan-eksplorasi-data">Step 3 — Load dan Eksplorasi Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-memahami-konsep-lag">Step 4 — Memahami Konsep Lag</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-membuat-dan-melatih-model">Step 5 — Membuat dan Melatih Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-explainability">Step 6 — Explainability</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Marshella Aulia Putri
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
